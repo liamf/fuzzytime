@@ -135,7 +135,6 @@ void updateLayer(TextLine *animating_line, int line) {
 static void update_watch(struct tm *t) {
     fuzzy_time(t->tm_hour, t->tm_min, new_time.line1, new_time.line2, new_time.line3);
     
-
     strftime(str_topbar, sizeof(str_topbar), "%H:%M | %A | %e %b", t);
     text_layer_set_text(topbarLayer, str_topbar);
 
@@ -214,7 +213,8 @@ static void window_load(Window *window) {
     #endif
     
     Layer *windowLayer = window_get_root_layer(window);
-    GRect frame = layer_get_frame(windowLayer);
+    
+    GRect frame = layer_get_bounds(windowLayer);
 
     #ifdef DEBUG
         APP_LOG(APP_LOG_LEVEL_DEBUG, "W1");
@@ -280,7 +280,10 @@ static void window_load(Window *window) {
 }
 
 static void window_unload(Window *window) {
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "Window unload");
+    #ifdef DEBUG
+        APP_LOG(APP_LOG_LEVEL_DEBUG, "Window unload");
+    #endif    
+       
     text_layer_destroy(line1.layer[0]);
     text_layer_destroy(line1.layer[1]);
     text_layer_destroy(line2.layer[0]);
