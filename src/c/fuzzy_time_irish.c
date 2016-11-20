@@ -65,8 +65,15 @@ const int line1_y = 18;
 const int line2_y = 60;
 const int line3_y = 102;
 
+static void watch_log(int level, char * log)
+{
+    #ifdef DEBUG
+        APP_LOG(level, log);
+    #endif
+}
+
 static void set_line2(void) {
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "In set_line2");
+    watch_log(APP_LOG_LEVEL_DEBUG, "In set_line2");
     Layer *layer = text_layer_get_layer(line2.layer[0]);
     GRect rect = layer_get_frame(layer);
     if (rect.origin.x == 0) {
@@ -74,7 +81,7 @@ static void set_line2(void) {
     } else {
         text_layer_set_font(line2.layer[0], fonts_get_system_font(LINE2_BOLD_FONT));
     }
-   APP_LOG(APP_LOG_LEVEL_DEBUG, "set_line2 done");  
+   watch_log(APP_LOG_LEVEL_DEBUG, "set_line2 done");  
   
 }
 
