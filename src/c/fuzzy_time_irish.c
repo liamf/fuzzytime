@@ -25,8 +25,8 @@
 #define DEBUG 
 
 /* Fonts. */
-#define TOPBAR_FONT       FONT_KEY_GOTHIC_24
-#define BOTTOMBAR_FONT    FONT_KEY_GOTHIC_24
+#define TOPBAR_FONT       FONT_KEY_GOTHIC_14_BOLD
+#define BOTTOMBAR_FONT    FONT_KEY_GOTHIC_14_BOLD
 
 #define LINE1_FONT        FONT_KEY_BITHAM_42_LIGHT
 #define LINE2_NORMAL_FONT FONT_KEY_BITHAM_42_LIGHT
@@ -36,6 +36,7 @@
 /* ========= End configuration. ========== */
 
 #define LINE_BUFFER_SIZE 50
+
 
 static Window *window;
 
@@ -64,51 +65,19 @@ static TextLine line3;
 static TimeLines cur_time;
 static TimeLines new_time;
 
-const int line1_y = 18;
-const int line2_y = 60;
-const int line3_y = 102;
+#define TIMELINE_SPACING  48
 
-void updateLayer(TextLine *animating_line, int line) {
-    TextLayer *inside, *outside;
-    Layer *layer = text_layer_get_layer(animating_line->layer[0]);
-    GRect rect = layer_get_frame(layer);
-
-    inside = (rect.origin.x == 0) ? animating_line->layer[0] : animating_line->layer[1];
-    Layer *in_layer = text_layer_get_layer(inside);
-    outside = (inside == animating_line->layer[0]) ? animating_line->layer[1] : animating_line->layer[0];
-    Layer *out_layer = text_layer_get_layer(outside);
-
-    /* TODO: is this the wrong way round? */
-    GRect in_rect = layer_get_frame(in_layer);
-    GRect out_rect = layer_get_frame(out_layer);
-
-    in_rect.origin.x -= 144;
-    out_rect.origin.x -= 144;
-
-    if (line == 1) {
-        text_layer_set_text(outside, new_time.line1);
-        text_layer_set_text(inside, cur_time.line1);
-    }
-
-    if (line == 2) {
-        text_layer_set_text(outside, new_time.line2);
-        text_layer_set_text(inside, cur_time.line2);
-    }
-
-    if (line == 3) {
-        text_layer_set_text(outside, new_time.line3);
-        text_layer_set_text(inside, cur_time.line3);
-    }
-
-}
+const int line1_y = 14;
+const int line2_y = 62;
+const int line3_y = 106;
 
 static void update_watch(struct tm *t) {
     fuzzy_time(t->tm_hour, t->tm_min, new_time.line1, new_time.line2, new_time.line3);
     
-    strftime(str_topbar, sizeof(str_topbar), "%H:%M | %A | %e %b", t);
+    strftime(str_topbar, sizeof(str_topbar), "%A %H:%M", t);
     text_layer_set_text(topbarLayer, str_topbar);
 
-    strftime(str_bottombar, sizeof(str_bottombar), " %H%M | Week %W", t);
+    strftime(str_bottombar, sizeof(str_bottombar), "%d %b", t);
     text_layer_set_text(bottombarLayer, str_bottombar);
 
     if (t->tm_min == 0) {
@@ -123,23 +92,23 @@ static void update_watch(struct tm *t) {
     }
 
     if (strcmp(new_time.line1, cur_time.line1) != 0) {
-        updateLayer(&line1, 1);
+        text_layer_set_text(line1.layer[0], cur_time.line1);
     }
     if (strcmp(new_time.line2, cur_time.line2) != 0) {
-        updateLayer(&line2, 2);
+        text_layer_set_text(line2.layer[0], cur_time.line2);
     }
     if (strcmp(new_time.line3, cur_time.line3) != 0) {
-        updateLayer(&line3, 3);
+        text_layer_set_text(line3.layer[0], cur_time.line3);
     }
 }
 
 static void init_watch(struct tm *t) {
     fuzzy_time(t->tm_hour, t->tm_min, new_time.line1, new_time.line2, new_time.line3);
 
-    strftime(str_topbar, sizeof(str_topbar), "%H:%M | %A | %e %b", t);
+    strftime(str_topbar, sizeof(str_topbar), "%A %H:%M", t);
     text_layer_set_text(topbarLayer, str_topbar);
 
-    strftime(str_bottombar, sizeof(str_bottombar), " %H%M | Week %W", t);
+    strftime(str_bottombar, sizeof(str_bottombar), "%d %b", t);
     text_layer_set_text(bottombarLayer, str_bottombar);
 
     strcpy(cur_time.line1, new_time.line1);
@@ -182,34 +151,40 @@ static void window_load(Window *window) {
     // Three lines of time text
     // bottom info bar
     
-    line1.layer[0] = text_layer_create(GRect(0, line1_y, frame.size.w, 50));
+    line1.layer[0] = text_layer_create(GRect(0, line1_y, frame.size.w, TIMELINE_SPACING));
     text_layer_set_text_alignment(line1.layer[0], GTextAlignmentCenter);
+    text_layer_set_text_color(line1.layer[0],GColorRajah);
+    text_layer_set_background_color(line1.layer[0],GColorBlack);    
     text_layer_set_font(line1.layer[0], fonts_get_system_font(LINE1_FONT));
     layer_add_child(windowLayer, text_layer_get_layer(line1.layer[0]));
 
-    line2.layer[0] = text_layer_create(GRect(0, line2_y, frame.size.w, 50));
+    line2.layer[0] = text_layer_create(GRect(0, line2_y, frame.size.w, TIMELINE_SPACING));
     text_layer_set_text_alignment(line2.layer[0], GTextAlignmentCenter);
+    text_layer_set_text_color(line2.layer[0],GColorWhite);
+    text_layer_set_background_color(line2.layer[0],GColorBlack);
     text_layer_set_font(line2.layer[0], fonts_get_system_font(LINE2_NORMAL_FONT));
     layer_add_child(windowLayer, text_layer_get_layer(line2.layer[0]));
 
-    line3.layer[0] = text_layer_create(GRect(0, line3_y, frame.size.w, 50));
+    line3.layer[0] = text_layer_create(GRect(0, line3_y, frame.size.w, TIMELINE_SPACING));
     text_layer_set_text_alignment(line3.layer[0], GTextAlignmentCenter);
-    //text_layer_set_text_color(line3.layer[0],GColorRajah);
+    text_layer_set_text_color(line3.layer[0],GColorRajah);
     text_layer_set_background_color(line3.layer[0],GColorBlack);
     text_layer_set_font(line3.layer[0], fonts_get_system_font(LINE3_FONT));
     layer_add_child(windowLayer, text_layer_get_layer(line3.layer[0]));
 
-    topbarLayer = text_layer_create(GRect(0, 0, 144, 18));
+    topbarLayer = text_layer_create(GRect(0, 5, frame.size.w, 18));
     text_layer_set_text_color(topbarLayer, GColorWhite);
     text_layer_set_background_color(topbarLayer, GColorBlack);
     text_layer_set_font(topbarLayer, fonts_get_system_font(TOPBAR_FONT));
     text_layer_set_text_alignment(topbarLayer, GTextAlignmentCenter);
+    layer_add_child(windowLayer, text_layer_get_layer(topbarLayer));
 
-    bottombarLayer = text_layer_create(GRect(0, 150, 144, 18));
+    bottombarLayer = text_layer_create(GRect(0, 150, frame.size.w, 18));
     text_layer_set_text_color(bottombarLayer, GColorWhite);
     text_layer_set_background_color(bottombarLayer, GColorBlack);
     text_layer_set_font(bottombarLayer, fonts_get_system_font(BOTTOMBAR_FONT));
     text_layer_set_text_alignment(bottombarLayer, GTextAlignmentCenter);
+    layer_add_child(windowLayer, text_layer_get_layer(bottombarLayer));
 
 
     time_t now = time(NULL);
