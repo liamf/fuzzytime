@@ -21,6 +21,8 @@
 #define HOURLY_VIBE_START 8
 #define HOURLY_VIBE_END 23
 
+// Define DEBUG to turn on verbose logging
+#define DEBUG 
 
 /* Fonts. */
 #define LINE1_FONT FONT_KEY_BITHAM_42_LIGHT
@@ -63,15 +65,8 @@ const int line1_y = 18;
 const int line2_y = 60;
 const int line3_y = 102;
 
-static void set_pm_style(void) {
-    text_layer_set_text_color(line3.layer[0], GColorWhite);
-    text_layer_set_background_color(line3.layer[0], GColorClear);
-    text_layer_set_text_color(line3.layer[1], GColorWhite);
-    text_layer_set_background_color(line3.layer[1], GColorClear);
-    text_layer_set_background_color(line3_bg, GColorClear);
-}
-
-static void set_line2_pm(void) {
+static void set_line2(void) {
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "In set_line2");
     Layer *layer = text_layer_get_layer(line2.layer[0]);
     GRect rect = layer_get_frame(layer);
     if (rect.origin.x == 0) {
@@ -79,6 +74,8 @@ static void set_line2_pm(void) {
     } else {
         text_layer_set_font(line2.layer[0], fonts_get_system_font(LINE2_BOLD_FONT));
     }
+   APP_LOG(APP_LOG_LEVEL_DEBUG, "set_line2 done");  
+  
 }
 
 static void reset_line2(void) {
@@ -140,6 +137,7 @@ static void update_watch(struct tm *t) {
     text_layer_set_text(bottombarLayer, str_bottombar);
 
     if (t->tm_min == 0) {
+      
 #ifdef HOURLY_VIBE
         /* No vibe during the night. */
         if (t->tm_hour > HOURLY_VIBE_START && t->tm_hour <= HOURLY_VIBE_END) {
@@ -147,15 +145,12 @@ static void update_watch(struct tm *t) {
         }
 #endif
 
-        set_line2_pm();
+        set_line2();
     }
 
     if (t->tm_min > 1) {
         reset_line2();
     }
-
-
-    set_pm_style();
 
     if (strcmp(new_time.line1, cur_time.line1) != 0) {
         updateLayer(&line1, 1);
@@ -181,13 +176,15 @@ static void init_watch(struct tm *t) {
     strcpy(cur_time.line2, new_time.line2);
     strcpy(cur_time.line3, new_time.line3);
 
-
-    set_line2_pm();
-    set_pm_style();
-
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "About to set line style");
+    set_line2();
+  
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "Style set");
     text_layer_set_text(line1.layer[0], cur_time.line1);
     text_layer_set_text(line2.layer[0], cur_time.line2);
     text_layer_set_text(line3.layer[0], cur_time.line3);
+  
+   APP_LOG(APP_LOG_LEVEL_DEBUG, "Watch Init done");
 }
 
 static void handle_minute_tick(struct tm *tick_time, TimeUnits units_changed) {
@@ -196,10 +193,11 @@ static void handle_minute_tick(struct tm *tick_time, TimeUnits units_changed) {
 }
 
 static void window_load(Window *window) {
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "Window load");
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "Window load entry");
     Layer *windowLayer = window_get_root_layer(window);
     GRect frame = layer_get_frame(windowLayer);
 
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "W1");
     window_set_background_color(window, GColorBlack);
 
     line1.layer[0] = text_layer_create(GRect(0, line1_y, frame.size.w, 50));
@@ -251,6 +249,7 @@ static void window_load(Window *window) {
 
     time_t now = time(NULL);
     struct tm *t = localtime(&now);
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "About to init watch");
     init_watch(t);
 }
 
