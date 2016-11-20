@@ -68,39 +68,6 @@ const int line1_y = 18;
 const int line2_y = 60;
 const int line3_y = 102;
 
-static void set_line2(void) {
-    #ifdef DEBUG
-        APP_LOG(APP_LOG_LEVEL_DEBUG, "In set_line2");
-    #endif
-    
-    Layer *layer = text_layer_get_layer(line2.layer[0]);
-    GRect rect = layer_get_frame(layer);
-    if (rect.origin.x == 0) {
-        text_layer_set_font(line2.layer[1], fonts_get_system_font(LINE2_BOLD_FONT));
-    } else {
-        text_layer_set_font(line2.layer[0], fonts_get_system_font(LINE2_BOLD_FONT));
-    }
-    
-    #ifdef DEBUG
-        APP_LOG(APP_LOG_LEVEL_DEBUG, "set_line2 done");
-    #endif
-  
-}
-
-static void reset_line2(void) {
-    Layer *layer = text_layer_get_layer(line2.layer[0]);
-    GRect rect = layer_get_frame(layer);
-    if (rect.origin.x == 0) {
-        text_layer_set_text_color(line2.layer[1], GColorWhite);
-        text_layer_set_background_color(line2.layer[1], GColorBlack);
-        text_layer_set_font(line2.layer[1], fonts_get_system_font(LINE2_NORMAL_FONT));
-    } else {
-        text_layer_set_text_color(line2.layer[0], GColorWhite);
-        text_layer_set_background_color(line2.layer[0], GColorBlack);
-        text_layer_set_font(line2.layer[0], fonts_get_system_font(LINE2_NORMAL_FONT));
-    }
-}
-
 void updateLayer(TextLine *animating_line, int line) {
     TextLayer *inside, *outside;
     Layer *layer = text_layer_get_layer(animating_line->layer[0]);
@@ -153,11 +120,6 @@ static void update_watch(struct tm *t) {
         }
 #endif
 
-        set_line2();
-    }
-
-    if (t->tm_min > 1) {
-        reset_line2();
     }
 
     if (strcmp(new_time.line1, cur_time.line1) != 0) {
@@ -183,15 +145,6 @@ static void init_watch(struct tm *t) {
     strcpy(cur_time.line1, new_time.line1);
     strcpy(cur_time.line2, new_time.line2);
     strcpy(cur_time.line3, new_time.line3);
-
-    #ifdef DEBUG
-        APP_LOG(APP_LOG_LEVEL_DEBUG, "About to set line style");
-    #endif
-    set_line2();
-    
-    #ifdef DEBUG  
-        APP_LOG(APP_LOG_LEVEL_DEBUG, "Style set");
-    #endif
     
     text_layer_set_text(line1.layer[0], cur_time.line1);
     text_layer_set_text(line2.layer[0], cur_time.line2);
@@ -241,6 +194,8 @@ static void window_load(Window *window) {
 
     line3.layer[0] = text_layer_create(GRect(0, line3_y, frame.size.w, 50));
     text_layer_set_text_alignment(line3.layer[0], GTextAlignmentCenter);
+    //text_layer_set_text_color(line3.layer[0],GColorRajah);
+    text_layer_set_background_color(line3.layer[0],GColorBlack);
     text_layer_set_font(line3.layer[0], fonts_get_system_font(LINE3_FONT));
     layer_add_child(windowLayer, text_layer_get_layer(line3.layer[0]));
 
