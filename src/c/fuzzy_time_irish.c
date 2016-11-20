@@ -25,13 +25,13 @@
 #define DEBUG 
 
 /* Fonts. */
-#define TOPBAR_FONT FONT_KEY_GOTHIC_24
-#define BOTTOMBAR_FONT FONT_KEY_GOTHIC_24
+#define TOPBAR_FONT       FONT_KEY_GOTHIC_24
+#define BOTTOMBAR_FONT    FONT_KEY_GOTHIC_24
 
-#define LINE1_FONT FONT_KEY_BITHAM_42_LIGHT
+#define LINE1_FONT        FONT_KEY_BITHAM_42_LIGHT
 #define LINE2_NORMAL_FONT FONT_KEY_BITHAM_42_LIGHT
-#define LINE2_BOLD_FONT FONT_KEY_BITHAM_42_BOLD
-#define LINE3_FONT FONT_KEY_BITHAM_42_BOLD
+#define LINE2_BOLD_FONT   FONT_KEY_BITHAM_42_BOLD
+#define LINE3_FONT        FONT_KEY_BITHAM_42_BOLD
 
 /* ========= End configuration. ========== */
 
@@ -215,8 +215,7 @@ static void window_load(Window *window) {
         APP_LOG(APP_LOG_LEVEL_DEBUG, "Window load entry");
     #endif
     
-    Layer *windowLayer = window_get_root_layer(window);
-    
+    Layer *windowLayer = window_get_root_layer(window);   
     GRect frame = layer_get_bounds(windowLayer);
 
     #ifdef DEBUG
@@ -225,39 +224,25 @@ static void window_load(Window *window) {
     
     window_set_background_color(window, GColorBlack);
 
+    // Our display has 3 lines
+    // top info bar
+    // Three lines of time text
+    // bottom info bar
+    
     line1.layer[0] = text_layer_create(GRect(0, line1_y, frame.size.w, 50));
     text_layer_set_text_alignment(line1.layer[0], GTextAlignmentCenter);
-    text_layer_set_background_color(line1.layer[0], GColorClear);
-    text_layer_set_text_color(line1.layer[0], GColorWhite);
+    text_layer_set_font(line1.layer[0], fonts_get_system_font(LINE1_FONT));
     layer_add_child(windowLayer, text_layer_get_layer(line1.layer[0]));
-
-    line1.layer[1] = text_layer_create(GRect(frame.size.w, line1_y, frame.size.w, 50));
-    text_layer_set_background_color(line1.layer[1], GColorClear);
-    text_layer_set_text_color(line1.layer[1], GColorWhite);
-    text_layer_set_font(line1.layer[1], fonts_get_system_font(LINE1_FONT));
-    layer_add_child(windowLayer, text_layer_get_layer(line1.layer[1]));
 
     line2.layer[0] = text_layer_create(GRect(0, line2_y, frame.size.w, 50));
     text_layer_set_text_alignment(line2.layer[0], GTextAlignmentCenter);
-    text_layer_set_background_color(line2.layer[0], GColorBlack);
-    text_layer_set_text_color(line2.layer[0], GColorWhite);
     text_layer_set_font(line2.layer[0], fonts_get_system_font(LINE2_NORMAL_FONT));
     layer_add_child(windowLayer, text_layer_get_layer(line2.layer[0]));
-
-    line2.layer[1] = text_layer_create(GRect(frame.size.w, line2_y, frame.size.w, 50));
-    text_layer_set_text_alignment(line2.layer[1], GTextAlignmentCenter);
-    text_layer_set_background_color(line2.layer[1], GColorBlack);
-    text_layer_set_text_color(line2.layer[1], GColorWhite);
-    text_layer_set_font(line2.layer[1], fonts_get_system_font(LINE2_NORMAL_FONT));
 
     line3.layer[0] = text_layer_create(GRect(0, line3_y, frame.size.w, 50));
     text_layer_set_text_alignment(line3.layer[0], GTextAlignmentCenter);
     text_layer_set_font(line3.layer[0], fonts_get_system_font(LINE3_FONT));
-
-    line3.layer[1] = text_layer_create(GRect(frame.size.w, line3_y, frame.size.w, 50));
-    text_layer_set_text_alignment(line3.layer[1], GTextAlignmentCenter);
-
-    text_layer_set_font(line3.layer[1], fonts_get_system_font(LINE3_FONT));
+    layer_add_child(windowLayer, text_layer_get_layer(line3.layer[0]));
 
     topbarLayer = text_layer_create(GRect(0, 0, 144, 18));
     text_layer_set_text_color(topbarLayer, GColorWhite);
