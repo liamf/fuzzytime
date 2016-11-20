@@ -65,15 +65,11 @@ const int line1_y = 18;
 const int line2_y = 60;
 const int line3_y = 102;
 
-static void watch_log(int level, char * log)
-{
-    #ifdef DEBUG
-        APP_LOG(level, log);
-    #endif
-}
-
 static void set_line2(void) {
-    watch_log(APP_LOG_LEVEL_DEBUG, "In set_line2");
+    #ifdef DEBUG
+        APP_LOG(APP_LOG_LEVEL_DEBUG, "In set_line2");
+    #endif
+    
     Layer *layer = text_layer_get_layer(line2.layer[0]);
     GRect rect = layer_get_frame(layer);
     if (rect.origin.x == 0) {
@@ -81,7 +77,10 @@ static void set_line2(void) {
     } else {
         text_layer_set_font(line2.layer[0], fonts_get_system_font(LINE2_BOLD_FONT));
     }
-   watch_log(APP_LOG_LEVEL_DEBUG, "set_line2 done");  
+    
+    #ifdef DEBUG
+        APP_LOG(APP_LOG_LEVEL_DEBUG, "set_line2 done");
+    #endif
   
 }
 
@@ -183,28 +182,44 @@ static void init_watch(struct tm *t) {
     strcpy(cur_time.line2, new_time.line2);
     strcpy(cur_time.line3, new_time.line3);
 
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "About to set line style");
+    #ifdef DEBUG
+        APP_LOG(APP_LOG_LEVEL_DEBUG, "About to set line style");
+    #endif
     set_line2();
-  
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "Style set");
+    
+    #ifdef DEBUG  
+        APP_LOG(APP_LOG_LEVEL_DEBUG, "Style set");
+    #endif
+    
     text_layer_set_text(line1.layer[0], cur_time.line1);
     text_layer_set_text(line2.layer[0], cur_time.line2);
     text_layer_set_text(line3.layer[0], cur_time.line3);
   
-   APP_LOG(APP_LOG_LEVEL_DEBUG, "Watch Init done");
+    #ifdef DEBUG   
+        APP_LOG(APP_LOG_LEVEL_DEBUG, "Watch Init done");
+    #endif
+    
 }
 
 static void handle_minute_tick(struct tm *tick_time, TimeUnits units_changed) {
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "Tick");
+    #ifdef DEBUG
+        APP_LOG(APP_LOG_LEVEL_DEBUG, "Tick");
+    #endif
     update_watch(tick_time);
 }
 
 static void window_load(Window *window) {
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "Window load entry");
+    #ifdef DEBUG
+        APP_LOG(APP_LOG_LEVEL_DEBUG, "Window load entry");
+    #endif
+    
     Layer *windowLayer = window_get_root_layer(window);
     GRect frame = layer_get_frame(windowLayer);
 
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "W1");
+    #ifdef DEBUG
+        APP_LOG(APP_LOG_LEVEL_DEBUG, "W1");
+    #endif
+    
     window_set_background_color(window, GColorBlack);
 
     line1.layer[0] = text_layer_create(GRect(0, line1_y, frame.size.w, 50));
@@ -256,7 +271,11 @@ static void window_load(Window *window) {
 
     time_t now = time(NULL);
     struct tm *t = localtime(&now);
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "About to init watch");
+    
+    #ifdef DEBUG
+        APP_LOG(APP_LOG_LEVEL_DEBUG, "About to init watch");
+    #endif
+    
     init_watch(t);
 }
 
@@ -274,7 +293,10 @@ static void window_unload(Window *window) {
 }
 
 static void init(void) {
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "Init");
+    #ifdef DEBUG
+        APP_LOG(APP_LOG_LEVEL_DEBUG, "Init");
+    #endif
+    
     window = window_create();
     window_set_window_handlers(window, (WindowHandlers) {
         .load = window_load,
@@ -286,14 +308,18 @@ static void init(void) {
 }
 
 static void deinit(void) {
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "Deinit");
+    #ifdef DEBUG
+        APP_LOG(APP_LOG_LEVEL_DEBUG, "Deinit");
+    #endif
     tick_timer_service_unsubscribe();
     window_destroy(window);
 }
 
 int main(void) {
     init();
-    APP_LOG(APP_LOG_LEVEL_DEBUG, "Done initializing, pushed window: %p", window);
+    #ifdef DEBUG
+        APP_LOG(APP_LOG_LEVEL_DEBUG, "Done initializing, pushed window: %p", window);
+    #endif
     app_event_loop();
     deinit();
 }
