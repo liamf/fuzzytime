@@ -25,6 +25,9 @@
 #define DEBUG 
 
 /* Fonts. */
+#define TOPBAR_FONT FONT_KEY_GOTHIC_24
+#define BOTTOMBAR_FONT FONT_KEY_GOTHIC_24
+
 #define LINE1_FONT FONT_KEY_BITHAM_42_LIGHT
 #define LINE2_NORMAL_FONT FONT_KEY_BITHAM_42_LIGHT
 #define LINE2_BOLD_FONT FONT_KEY_BITHAM_42_BOLD
@@ -223,7 +226,7 @@ static void window_load(Window *window) {
     window_set_background_color(window, GColorBlack);
 
     line1.layer[0] = text_layer_create(GRect(0, line1_y, frame.size.w, 50));
-    text_layer_set_text_alignment(line1.layer[0], GTextAlignmentLeft);
+    text_layer_set_text_alignment(line1.layer[0], GTextAlignmentCenter);
     text_layer_set_background_color(line1.layer[0], GColorClear);
     text_layer_set_text_color(line1.layer[0], GColorWhite);
     layer_add_child(windowLayer, text_layer_get_layer(line1.layer[0]));
@@ -235,37 +238,37 @@ static void window_load(Window *window) {
     layer_add_child(windowLayer, text_layer_get_layer(line1.layer[1]));
 
     line2.layer[0] = text_layer_create(GRect(0, line2_y, frame.size.w, 50));
-    text_layer_set_text_alignment(line2.layer[0], GTextAlignmentLeft);
+    text_layer_set_text_alignment(line2.layer[0], GTextAlignmentCenter);
     text_layer_set_background_color(line2.layer[0], GColorBlack);
     text_layer_set_text_color(line2.layer[0], GColorWhite);
     text_layer_set_font(line2.layer[0], fonts_get_system_font(LINE2_NORMAL_FONT));
     layer_add_child(windowLayer, text_layer_get_layer(line2.layer[0]));
 
     line2.layer[1] = text_layer_create(GRect(frame.size.w, line2_y, frame.size.w, 50));
-    text_layer_set_text_alignment(line2.layer[1], GTextAlignmentLeft);
+    text_layer_set_text_alignment(line2.layer[1], GTextAlignmentCenter);
     text_layer_set_background_color(line2.layer[1], GColorBlack);
     text_layer_set_text_color(line2.layer[1], GColorWhite);
     text_layer_set_font(line2.layer[1], fonts_get_system_font(LINE2_NORMAL_FONT));
 
     line3.layer[0] = text_layer_create(GRect(0, line3_y, frame.size.w, 50));
-    text_layer_set_text_alignment(line3.layer[0], GTextAlignmentLeft);
+    text_layer_set_text_alignment(line3.layer[0], GTextAlignmentCenter);
     text_layer_set_font(line3.layer[0], fonts_get_system_font(LINE3_FONT));
 
     line3.layer[1] = text_layer_create(GRect(frame.size.w, line3_y, frame.size.w, 50));
-    text_layer_set_text_alignment(line3.layer[1], GTextAlignmentLeft);
+    text_layer_set_text_alignment(line3.layer[1], GTextAlignmentCenter);
 
     text_layer_set_font(line3.layer[1], fonts_get_system_font(LINE3_FONT));
 
     topbarLayer = text_layer_create(GRect(0, 0, 144, 18));
     text_layer_set_text_color(topbarLayer, GColorWhite);
     text_layer_set_background_color(topbarLayer, GColorBlack);
-    text_layer_set_font(topbarLayer, fonts_get_system_font(FONT_KEY_GOTHIC_14));
+    text_layer_set_font(topbarLayer, fonts_get_system_font(TOPBAR_FONT));
     text_layer_set_text_alignment(topbarLayer, GTextAlignmentCenter);
 
     bottombarLayer = text_layer_create(GRect(0, 150, 144, 18));
     text_layer_set_text_color(bottombarLayer, GColorWhite);
     text_layer_set_background_color(bottombarLayer, GColorBlack);
-    text_layer_set_font(bottombarLayer, fonts_get_system_font(FONT_KEY_GOTHIC_14));
+    text_layer_set_font(bottombarLayer, fonts_get_system_font(BOTTOMBAR_FONT));
     text_layer_set_text_alignment(bottombarLayer, GTextAlignmentCenter);
 
 
