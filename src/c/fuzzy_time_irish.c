@@ -1,6 +1,11 @@
 /*
  * Irish Fuzzy Time
- * jim.lawton@gmail.com
+ *
+ * Simple watchface to tell time in the Hiberno-English style
+ *
+ *  jim.lawton@gmail.com
+ *  modifications by
+ *  liam.friel@gmail.com
  *
  * Inspired by Fuzzy Time +, Fuzzy Time.
  * 
@@ -18,11 +23,11 @@
 
 /* Enable hourly vibration. */
 #define HOURLY_VIBE
-#define HOURLY_VIBE_START 8
+#define HOURLY_VIBE_START 7
 #define HOURLY_VIBE_END 23
 
 // Define DEBUG to turn on verbose logging
-#define DEBUG 
+// #define DEBUG 
 
 /* Fonts. */
 #define TOPBAR_FONT       FONT_KEY_GOTHIC_14_BOLD
@@ -69,7 +74,7 @@ static TimeLines new_time;
 
 const int line1_y = 14;
 const int line2_y = 62;
-const int line3_y = 106;
+const int line3_y = 107;
 
 static void update_watch(struct tm *t) {
     fuzzy_time(t->tm_hour, t->tm_min, new_time.line1, new_time.line2, new_time.line3);
@@ -91,15 +96,10 @@ static void update_watch(struct tm *t) {
 
     }
 
-    if (strcmp(new_time.line1, cur_time.line1) != 0) {
-        text_layer_set_text(line1.layer[0], cur_time.line1);
-    }
-    if (strcmp(new_time.line2, cur_time.line2) != 0) {
-        text_layer_set_text(line2.layer[0], cur_time.line2);
-    }
-    if (strcmp(new_time.line3, cur_time.line3) != 0) {
-        text_layer_set_text(line3.layer[0], cur_time.line3);
-    }
+    text_layer_set_text(line1.layer[0], new_time.line1);
+    text_layer_set_text(line2.layer[0], new_time.line2);
+    text_layer_set_text(line3.layer[0], new_time.line3);
+
 }
 
 static void init_watch(struct tm *t) {
@@ -172,7 +172,7 @@ static void window_load(Window *window) {
     text_layer_set_font(line3.layer[0], fonts_get_system_font(LINE3_FONT));
     layer_add_child(windowLayer, text_layer_get_layer(line3.layer[0]));
 
-    topbarLayer = text_layer_create(GRect(0, 5, frame.size.w, 18));
+    topbarLayer = text_layer_create(GRect(0, 6, frame.size.w, 18));
     text_layer_set_text_color(topbarLayer, GColorWhite);
     text_layer_set_background_color(topbarLayer, GColorBlack);
     text_layer_set_font(topbarLayer, fonts_get_system_font(TOPBAR_FONT));
