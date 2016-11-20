@@ -1,0 +1,24 @@
+{
+    "author": "liam.friel@gmail.com",
+    "dependencies": {},
+    "keywords": [],
+    "name": "irishface",
+    "pebble": {
+        "displayName": "IrishFace",
+        "enableMultiJS": true,
+        "messageKeys": [],
+        "projectType": "native",
+        "resources": {
+            "media": []
+        },
+        "sdkVersion": "3",
+        "targetPlatforms": [
+            "chalk"
+        ],
+        "uuid": "7f8b7e60-ca8a-4c8d-9566-69c7bd5e8825",
+        "watchapp": {
+            "watchface": false
+        }
+    },
+    "version": "1.0.0"
+}
