@@ -2,9 +2,9 @@
     "author": "liam.friel@gmail.com",
     "dependencies": {},
     "keywords": [],
-    "name": "irishface",
+    "name": "fuzzyirish",
     "pebble": {
-        "displayName": "IrishFace",
+        "displayName": "Fuzzy Irish Time",
         "enableMultiJS": true,
         "messageKeys": [],
         "projectType": "native",
@@ -17,7 +17,7 @@
         ],
         "uuid": "7f8b7e60-ca8a-4c8d-9566-69c7bd5e8825",
         "watchapp": {
-            "watchface": false
+            "watchface": true
         }
     },
     "version": "1.0.0"
