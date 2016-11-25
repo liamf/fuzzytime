@@ -37,12 +37,16 @@ static const char* const HOURS[] = {
 
 void fuzzy_time(int hours, int minutes, char* line1, char* line2, char* line3) {
 
-    if (minutes % 5 >= 1 && minutes % 5 < 4) {
+    if (minutes % 5 >= 1 && minutes % 5 < 3) {
         strcpy(line1, "gone");
     }
 
-    if (minutes % 5 == 4) {
+    if (minutes % 5 == 3) {
         strcpy(line1, "nearly");
+    }
+  
+    if (minutes % 5 == 4) {
+        strcpy(line1, "almost");
     }
 
     if (minutes >= 34) {
@@ -97,12 +101,16 @@ void fuzzy_time(int hours, int minutes, char* line1, char* line2, char* line3) {
     case 14:
     case 15:
     case 16:
-    case 17:
-    case 18:
         strcpy(line1, "quarter");
         strcpy(line2, "past");
         strcpy(line3, HOURS[hours]);
         break;
+    case 17:
+    case 18:
+        strcpy(line1, "gone");
+        strcpy(line2, "1/4 past");
+        strcpy(line3, HOURS[hours]);
+        break;      
     case 19:
         strcpy(line2, "20 past");
         strcpy(line3, HOURS[hours]);
@@ -136,12 +144,15 @@ void fuzzy_time(int hours, int minutes, char* line1, char* line2, char* line3) {
     case 29:
     case 30:
     case 31:
-    case 32:
-    case 33:
         strcpy(line1, "half");
         strcpy(line2, "past");
         strcpy(line3, HOURS[hours]);
         break;
+    case 32:
+    case 33:
+        strcpy(line1, "gone");
+        strcpy(line2, "half past");
+        strcpy(line3, HOURS[hours]);      
     case 34:
         strcpy(line2, "25 to");
         strcpy(line3, HOURS[hours]);
@@ -154,8 +165,8 @@ void fuzzy_time(int hours, int minutes, char* line1, char* line2, char* line3) {
     case 36:
     case 37:
     case 38:
-        strcpy(line1, "25");
-        strcpy(line2, "to");
+        strcpy(line1, "gone");
+        strcpy(line2, "25 to");
         strcpy(line3, HOURS[hours]);
         break;
     case 39:
@@ -176,12 +187,15 @@ void fuzzy_time(int hours, int minutes, char* line1, char* line2, char* line3) {
     case 44:
     case 45:
     case 46:
-    case 47:
-    case 48:
         strcpy(line1, "quarter");
         strcpy(line2, "to");
         strcpy(line3, HOURS[hours]);
         break;
+    case 47:
+    case 48:
+        strcpy(line1, "gone");
+        strcpy(line2, "1/4 to");
+        strcpy(line3, HOURS[hours]);      
     case 49:
         strcpy(line2, "10 to");
         strcpy(line3, HOURS[hours]);

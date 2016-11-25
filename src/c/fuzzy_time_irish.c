@@ -70,11 +70,13 @@ static TextLine line3;
 static TimeLines cur_time;
 static TimeLines new_time;
 
-#define TIMELINE_SPACING  48
+#define TIMELINE_SPACING  49
 
 const int line1_y = 14;
 const int line2_y = 62;
-const int line3_y = 107;
+const int line3_y = 111;
+const int topbar_y = 5;
+const int bottombar_y = 160;
 
 static void update_watch(struct tm *t) {
     fuzzy_time(t->tm_hour, t->tm_min, new_time.line1, new_time.line2, new_time.line3);
@@ -99,7 +101,7 @@ static void update_watch(struct tm *t) {
     text_layer_set_text(line1.layer[0], new_time.line1);
     text_layer_set_text(line2.layer[0], new_time.line2);
     text_layer_set_text(line3.layer[0], new_time.line3);
-
+ 
 }
 
 static void init_watch(struct tm *t) {
@@ -146,7 +148,7 @@ static void window_load(Window *window) {
     
     window_set_background_color(window, GColorBlack);
 
-    // Our display has 3 lines
+    // Our display has 5 lines
     // top info bar
     // Three lines of time text
     // bottom info bar
@@ -172,14 +174,14 @@ static void window_load(Window *window) {
     text_layer_set_font(line3.layer[0], fonts_get_system_font(LINE3_FONT));
     layer_add_child(windowLayer, text_layer_get_layer(line3.layer[0]));
 
-    topbarLayer = text_layer_create(GRect(0, 6, frame.size.w, 18));
+    topbarLayer = text_layer_create(GRect(0, topbar_y, frame.size.w, 18));
     text_layer_set_text_color(topbarLayer, GColorWhite);
     text_layer_set_background_color(topbarLayer, GColorBlack);
     text_layer_set_font(topbarLayer, fonts_get_system_font(TOPBAR_FONT));
     text_layer_set_text_alignment(topbarLayer, GTextAlignmentCenter);
     layer_add_child(windowLayer, text_layer_get_layer(topbarLayer));
 
-    bottombarLayer = text_layer_create(GRect(0, 150, frame.size.w, 18));
+    bottombarLayer = text_layer_create(GRect(0, bottombar_y, frame.size.w, 18));
     text_layer_set_text_color(bottombarLayer, GColorWhite);
     text_layer_set_background_color(bottombarLayer, GColorBlack);
     text_layer_set_font(bottombarLayer, fonts_get_system_font(BOTTOMBAR_FONT));
