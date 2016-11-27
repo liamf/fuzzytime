@@ -45,6 +45,8 @@
 
 static Window *window;
 
+// The two layers per line is not used in this version of the code
+// It could be used for animation
 typedef struct {
     TextLayer *layer[2];
 } TextLine;
@@ -62,7 +64,6 @@ static TextLayer *bottombarLayer;
 static char str_bottombar[LINE_BUFFER_SIZE];
 
 
-static TextLayer *line3_bg;
 static TextLine line1;
 static TextLine line2;
 static TextLine line3;
@@ -70,9 +71,13 @@ static TextLine line3;
 static TimeLines cur_time;
 static TimeLines new_time;
 
+// Minimum size to avoid some text clipping
 #define TIMELINE_SPACING  49
 
-const int line1_y = 14;
+// These values are experimentally derived for the Pebble Round
+// ... and are not guaranteed to work nicely, or at all actually, on different pebble models
+// Round display is (roughly) 180 x 180 pixels
+const int line1_y = 13;
 const int line2_y = 62;
 const int line3_y = 111;
 const int topbar_y = 5;
@@ -81,9 +86,11 @@ const int bottombar_y = 160;
 static void update_watch(struct tm *t) {
     fuzzy_time(t->tm_hour, t->tm_min, new_time.line1, new_time.line2, new_time.line3);
     
-    strftime(str_topbar, sizeof(str_topbar), "%A %H:%M", t);
+    // Day and HH:MM time
+    strftime(str_topbar, sizeof(str_topbar), "%a %H:%M", t);
     text_layer_set_text(topbarLayer, str_topbar);
 
+    // Date and Month
     strftime(str_bottombar, sizeof(str_bottombar), "%d %b", t);
     text_layer_set_text(bottombarLayer, str_bottombar);
 
@@ -98,6 +105,7 @@ static void update_watch(struct tm *t) {
 
     }
 
+    // Set the main watchface lines
     text_layer_set_text(line1.layer[0], new_time.line1);
     text_layer_set_text(line2.layer[0], new_time.line2);
     text_layer_set_text(line3.layer[0], new_time.line3);
@@ -107,7 +115,7 @@ static void update_watch(struct tm *t) {
 static void init_watch(struct tm *t) {
     fuzzy_time(t->tm_hour, t->tm_min, new_time.line1, new_time.line2, new_time.line3);
 
-    strftime(str_topbar, sizeof(str_topbar), "%A %H:%M", t);
+    strftime(str_topbar, sizeof(str_topbar), "%a %H:%M", t);
     text_layer_set_text(topbarLayer, str_topbar);
 
     strftime(str_bottombar, sizeof(str_bottombar), "%d %b", t);

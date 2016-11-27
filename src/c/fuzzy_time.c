@@ -22,8 +22,9 @@ static const char* const HOURS[] = {
 // Time      line1     line2     line3
 // ----      --------  --------  --------
 // 5:00      it's      five      o'clock
-// 5:01-03   gone      five      o'clock
-// 5:04      nearly    five past five
+// 5:01-02   gone      five      o'clock
+// 5:03      nearly    5 past    five
+// 5:04      almost    5 past    five
 // 5:05                five past five
 // 5:06-08   after     five past five
 // 5:09      nearly    ten past  five
@@ -49,7 +50,8 @@ void fuzzy_time(int hours, int minutes, char* line1, char* line2, char* line3) {
         strcpy(line1, "almost");
     }
 
-    if (minutes >= 34) {
+    // after half past the hour we are "to" the next hour
+    if (minutes >= 33) {
         hours += 1;
     }
 
@@ -64,10 +66,10 @@ void fuzzy_time(int hours, int minutes, char* line1, char* line2, char* line3) {
         break;
     case 1:
     case 2:
-    case 3:
         strcpy(line2, HOURS[hours]);
         strcpy(line3, "o'clock");
         break;
+    case 3:
     case 4:
         strcpy(line2, "5 past");
         strcpy(line3, HOURS[hours]);
@@ -79,10 +81,10 @@ void fuzzy_time(int hours, int minutes, char* line1, char* line2, char* line3) {
         break;
     case 6:
     case 7:
-    case 8:
         strcpy(line2, "5 past");
         strcpy(line3, HOURS[hours]);
         break;
+    case 8:
     case 9:
         strcpy(line2, "10 past");
         strcpy(line3, HOURS[hours]);
@@ -94,23 +96,26 @@ void fuzzy_time(int hours, int minutes, char* line1, char* line2, char* line3) {
         break;
     case 11:
     case 12:
-    case 13:
         strcpy(line2, "10 past");
         strcpy(line3, HOURS[hours]);
         break;
+    case 13:
     case 14:
+        strcpy(line2, "1/4 past");
+        strcpy(line3, HOURS[hours]);
+        break;     
     case 15:
-    case 16:
         strcpy(line1, "quarter");
         strcpy(line2, "past");
         strcpy(line3, HOURS[hours]);
         break;
+    case 16:
     case 17:
-    case 18:
         strcpy(line1, "gone");
         strcpy(line2, "1/4 past");
         strcpy(line3, HOURS[hours]);
         break;      
+    case 18:
     case 19:
         strcpy(line2, "20 past");
         strcpy(line3, HOURS[hours]);
@@ -122,10 +127,10 @@ void fuzzy_time(int hours, int minutes, char* line1, char* line2, char* line3) {
         break;
     case 21:
     case 22:
-    case 23:
         strcpy(line2, "20 past");
         strcpy(line3, HOURS[hours]);
         break;
+    case 23:
     case 24:
         strcpy(line2, "25 past");
         strcpy(line3, HOURS[hours]);
@@ -137,22 +142,26 @@ void fuzzy_time(int hours, int minutes, char* line1, char* line2, char* line3) {
         break;
     case 26:
     case 27:
-    case 28:
         strcpy(line2, "25 past");
         strcpy(line3, HOURS[hours]);
         break;
+    case 28:
     case 29:
-    case 30:
-    case 31:
+        strcpy(line2, "1/2 past");
+        strcpy(line3, HOURS[hours]);
+        break;
+    case 30:  
         strcpy(line1, "half");
         strcpy(line2, "past");
         strcpy(line3, HOURS[hours]);
         break;
+    case 31:
     case 32:
-    case 33:
         strcpy(line1, "gone");
         strcpy(line2, "half past");
         strcpy(line3, HOURS[hours]);      
+        break;
+    case 33:
     case 34:
         strcpy(line2, "25 to");
         strcpy(line3, HOURS[hours]);
@@ -164,11 +173,11 @@ void fuzzy_time(int hours, int minutes, char* line1, char* line2, char* line3) {
         break;
     case 36:
     case 37:
-    case 38:
         strcpy(line1, "gone");
         strcpy(line2, "25 to");
         strcpy(line3, HOURS[hours]);
         break;
+    case 38:
     case 39:
         strcpy(line2, "20 to");
         strcpy(line3, HOURS[hours]);
@@ -180,22 +189,26 @@ void fuzzy_time(int hours, int minutes, char* line1, char* line2, char* line3) {
         break;
     case 41:
     case 42:
-    case 43:
         strcpy(line2, "20 to");
         strcpy(line3, HOURS[hours]);
         break;
+    case 43:
     case 44:
+        strcpy(line2, "1/4 to");
+        strcpy(line3, HOURS[hours]);
+        break;      
     case 45:
-    case 46:
         strcpy(line1, "quarter");
         strcpy(line2, "to");
         strcpy(line3, HOURS[hours]);
         break;
+    case 46:
     case 47:
-    case 48:
         strcpy(line1, "gone");
         strcpy(line2, "1/4 to");
-        strcpy(line3, HOURS[hours]);      
+        strcpy(line3, HOURS[hours]);   
+        break;
+    case 48:
     case 49:
         strcpy(line2, "10 to");
         strcpy(line3, HOURS[hours]);
@@ -207,10 +220,10 @@ void fuzzy_time(int hours, int minutes, char* line1, char* line2, char* line3) {
         break;
     case 51:
     case 52:
-    case 53:
         strcpy(line2, "10 to");
         strcpy(line3, HOURS[hours]);
         break;
+    case 53:
     case 54:
         strcpy(line2, "5 to");
         strcpy(line3, HOURS[hours]);
@@ -222,10 +235,10 @@ void fuzzy_time(int hours, int minutes, char* line1, char* line2, char* line3) {
         break;
     case 56:
     case 57:
-    case 58:
         strcpy(line2, "5 to");
         strcpy(line3, HOURS[hours]);
         break;
+    case 58:
     case 59:
         strcpy(line2, HOURS[hours]);
         strcpy(line3, "o'clock");
